@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>contact</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg border-bottom border-40 border-dark">
+      <div class="container-xl py-10">
+        <div>
+            <a class="navbar-brand fw-bold fs-4 text-dark" href="index.html">WOWOROOM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link fs-5" aria-current="page" href="#">後台管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 active" href="#">管理員登入</a>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+    <section class="container-xl">
+      <h2 class="fs-7 text-center py-15 mb-0">全產品類別營收比重</h2>
+      <div class="chart"></div>
+    </section>
+    <section class="container-xl">
+      <div class="d-flex justify-content-end">
+        <a href="#" class="d-inline-block rounded fs-5 px-5 py-2 text-dark text-decoration-none border border-1 border-dark">清除全部訂單</a>
+      </div>
+      <div class="orderTable d-block py-4 mb-27">
+        <table class="table table-hover table-bordered align-middle">
+          <thead>
+            <tr class="text-nowrap">
+              <th scope="col">訂單編號</th>
+              <th scope="col">聯絡人</th>
+              <th scope="col">聯絡地址</th>
+              <th scope="col">電子郵件</th>
+              <th scope="col">訂單品項</th>
+              <th scope="col">訂單日期</th>
+              <th scope="col">訂單狀態</th>
+              <th scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-nowrap" id="orderItem">
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <script type="module" src="../main.js"></script>
+  </body>
+</html>
