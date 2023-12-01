@@ -243,9 +243,115 @@
       </ul>
 
     </section>
-    <section>
-      
+    <!------- 商品篩選 ------->
+    <section class="container-xl py-15">
+      <div class="d-flex py-8">
+        <select id="categorySearch" name="categorySearch" class="me-8 text-darkGray col-4" style="width: 255px; border: 1px solid #CED4DA;">
+          <option value="商品種類" disabled selected hidden>商品種類</option>
+          <option value="全部商品">全部商品</option>
+          <option value="床架">窗架</option>
+          <option value="收納">收納</option>
+          <option value="窗簾">窗簾</option>
+        </select>
+        <p class="searchResult text-darkGray mb-0" style="width: 255px">本次搜尋共 3 筆資料</p>
+      </div>
+      <ul class="list-unstyled row productList">
+        <li class="col h-100 position-relative">
+          <span class="bg-dark text-white fs-5 px-6 py-2 position-absolute" style="top: 12px;right: 8px;">新品</span>
+          <img src="../assets/images/BefHmH2.png" class="card-img-top" alt="產品圖片-${item.title}">
+          <input type="button" value="加入購物車" class="bg-dark fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}">
+          <div class="card-body">
+            <h5 class="card-title fs-5 py-2">${item.title}</h5>
+            <p class="card-text fs-5"><del>${item.origin_price}</del></p>
+            <p class="card-text fs-3">${item.price}</p>
+            <input type="hidden" class="quantityInput" value="1">
+          </div>
+        </li>
+      </ul>
     </section>
+    <!------- 購物車 ------->
+    <section class="bg-light">
+      <div class="container-xl pt-8 pb-18">
+        <h3 class="text-center my-7">我的購物車</h3>
+        <div class="cartTable d-block">
+          <table class="table align-middle fs-5">
+            <thead>
+              <tr>
+                <th scope="col">品項</th>
+                <th scope="col">單價</th>
+                <th scope="col">數量</th>
+                <th scope="col">金額</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="cartItem">
+              <tr class="text-nowrap fs-5">
+                <td class="d-flex py-5">
+                  <img src="${item.images}" class="card-img-top me-4" alt="產品圖片-${item.title}">
+                  <p>${item.title}</p>
+                </td>
+                <td class="py-5">${item.price}</td>
+                <td class="py-5">${item.quantity}</td>
+                <td class="py-5">${item.price}</td>
+                <td class="py-5">
+                  <a href="#" class="delCartItemBtn d-block d-flex justify-content-center align-items-center text-decoration-none" data-id="${item.id}">
+                    <span class="material-symbols-outlined text-dark" style="font-size: 24px;">
+                      close
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <!------- 填寫預訂資料 ------->
+    <section class="pb-20">
+      <h3 class="text-center my-7">填寫預訂資料</h3>
+      <div class="d-flex flex-column align-items-center">
+        <form class="addOrderForm form-group mb-12" style="width: 350px;">
+          <!-- 1. 姓名 -->
+          <!-- Validate.js input name 要和 div class name 一致 -->
+          <div class="d-flex flex-column mb-5">
+            <label for="customerName" class="mb-2">姓名</label>
+            <input type="text" id="customerName" placeholder="請輸入姓名" name="customerName">
+          </div>
+          <div class="errors-message customerName"></div>
+          <!-- 2. 電話 -->
+          <div class="d-flex flex-column mb-5">
+            <label for="customerTel" class="mb-2">電話</label>
+            <input type="text" id="customerTel" placeholder="請輸入電話" name="customerTel">
+          </div>
+          <div class="errors-message customerName"></div>
+          <!-- 3. Email -->
+          <div class="d-flex flex-column mb-5">
+            <label for="customerEmail" class="mb-2">Email</label>
+            <input type="text" id="customerEmail" placeholder="請輸入Email" name="customerEmail">
+          </div>
+          <div class="errors-message customerEmail"></div>
+          <!-- 4. 寄送地址 -->
+          <div class="d-flex flex-column mb-5">
+            <label for="customerAdd" class="mb-2">寄送地址</label>
+            <input type="text" id="customerAdd" placeholder="請輸入寄送地址" name="customerAdd">
+          </div>
+          <div class="errors-message customerAdd"></div>
+          <!-- 5. 交易方式 -->
+          <div class="d-flex flex-column">
+            <label for="payment" class="mb-2">交易方式</label>
+            <select id="payment" name="payment">
+              <option value="" disabled selected hidden>請選擇交易方式</option>
+              <option value="ATM">ATM</option>
+              <option value="Apple Pay">Apple Pay</option>
+              <option value="LINE Pay">LINE Pay</option>
+            </select>
+          </div>
+          <div class="errors-message payment"></div>
+        </form>
+        <input type="button" value="送出預定資料" class="addOrderBtn btn btn-dark" style="width: 350px;">
+      </div>
+    </section>
+
 
 
 

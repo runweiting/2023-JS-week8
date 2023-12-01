@@ -376,15 +376,16 @@ $gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0)) !default;
 $spacer: 1rem !default;
 $spacers: (
   0: 0,
-  1: $spacer * .25, // 4px
-  2: $spacer * .5,  // 8px
-  4: $spacer,       // custom
-  5: $spacer * 1.25, // custom
-  6: $spacer * 1.5, // custom
-  7: $spacer * 1.75, // custom
-  8: $spacer * 2,    // custom
-  10: $spacer * 2.5, // custom
-  12: $spacer * 3,   // custom
+  1: $spacer * .25,   // 4px
+  2: $spacer * .5,    // 8px
+  3: $spacer * 0.75,  // custom
+  4: $spacer,         // custom
+  5: $spacer * 1.25,  // custom
+  6: $spacer * 1.5,   // custom
+  7: $spacer * 1.75,  // custom
+  8: $spacer * 2,     // custom
+  10: $spacer * 2.5,  // custom
+  12: $spacer * 3,    // custom
   15: $spacer * 3.75, // custom
   18: $spacer * 4.5,  //custon
   20: $spacer * 5,    // custom
