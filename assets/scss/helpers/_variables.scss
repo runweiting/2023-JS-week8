@@ -310,14 +310,16 @@ $dark:          $gray-900 !default;
 
 // scss-docs-start theme-colors-map
 $theme-colors: (
-  "primary":    $primary,
-  "secondary":  $secondary,
+  "primary":    #6A33FF, // custom
+  "secondary":  #301E5F, //custom
   "success":    $success,
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
   "light":      $light,
-  "dark":       $dark
+  "dark":       $dark,
+  "white":      #ffffff, // custom
+  "darkGray":   #797979 // custom
 ) !default;
 // scss-docs-end theme-colors-map
 
@@ -380,10 +382,14 @@ $spacers: (
   5: $spacer * 1.25, // custom
   6: $spacer * 1.5, // custom
   7: $spacer * 1.75, // custom
+  8: $spacer * 2,    // custom
   10: $spacer * 2.5, // custom
   12: $spacer * 3,   // custom
   15: $spacer * 3.75, // custom
-  27: $spacer * 6.75 // custom
+  18: $spacer * 4.5,  //custon
+  20: $spacer * 5,    // custom
+  23: $spacer * 5.75, // custom
+  27: $spacer * 6.75  // custom
 
 ) !default;
 // scss-docs-end spacer-variables-maps
@@ -395,6 +401,8 @@ $spacers: (
 // scss-docs-start position-map
 $position-values: (
   0: 0,
+  5: 5%,   // custom
+  10: 10%, // custom
   50: 50%,
   100: 100%
 ) !default;
@@ -603,12 +611,13 @@ $headings-color:              null !default;
 
 // scss-docs-start display-headings
 $display-font-sizes: (
-  1: 5rem,
-  2: 4.5rem,
-  3: 4rem,
-  4: 3.5rem,
-  5: 3rem,
-  6: 2.5rem
+  1: 5rem,   // 80px
+  2: 4.5rem, // 72px
+  3: 4rem,   // 64px
+  4: 3.5rem, // 56px
+  5: 3rem,   // 48px
+  6: 2.5rem, // 40px
+  7: 2rem    // 32px
 ) !default;
 
 $display-font-family: null !default;

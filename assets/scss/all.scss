@@ -4,8 +4,14 @@
 
 // bootstrap5
 @import "../../node_modules/bootstrap/scss/functions";
-@import './utils/variables';
+@import './helpers/variables';
 @import "../../node_modules/bootstrap";
 
-// base, helpers, component
+// base
 @import './base/base';
+
+// helpers
+@import './helpers/background';
+
+// component
+@import './component/recommendation';

@@ -1,0 +1,19 @@
+@mixin bg-cover($url, $height) {
+    background: url($url);
+    height: $height;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+.bg-landingpage {
+    @include bg-cover('../images/3ewLAKn.png', 420px);
+}
+.bg-advantage1 {
+    @include bg-cover('../images/tR426y5.png', 140px);
+}
+.bg-advantage2 {
+    @include bg-cover('../images/Fd2MiBb.png', 140px);
+}
+.bg-advantage3 {
+    @include bg-cover('../images/5n1uTFh.png', 140px);
+}
