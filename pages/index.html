@@ -57,7 +57,7 @@
       <div class="container-xl d-flex flex-column align-items-center py-12">
         <h3 class="my-7">家具比較</h3>
         <div class="col-8">
-          <table class="table fs-5">
+          <table class="table align-middle fs-5">
             <thead>
               <tr>
                 <th></th>
@@ -103,7 +103,7 @@
       </div>
     </section>
     <section class="bg-secondary">
-      <div class="pt-15 pb-20">
+      <div class="container-xl pt-15 pb-20">
         <h3 class="my-7 text-white text-center">好評推薦</h3>
         <div class="recommendation">
           <ul class="d-flex gap-7 ms-23 mb-5">
@@ -190,9 +190,6 @@
           </ul>
         </div>
       </div>
-
-
-
     </section>
     <section class="container-xl pt-8 pb-18">
       <h3 class="text-center mb-8">運送方式</h3>
@@ -241,32 +238,21 @@
           <p>Email 付款資訊</p>
         </li>
       </ul>
-
     </section>
-    <!------- 商品篩選 ------->
+    <!------- 商品列表、篩選 ------->
     <section class="container-xl py-15">
       <div class="d-flex py-8">
         <select id="categorySearch" name="categorySearch" class="me-8 text-darkGray col-4" style="width: 255px; border: 1px solid #CED4DA;">
           <option value="商品種類" disabled selected hidden>商品種類</option>
           <option value="全部商品">全部商品</option>
-          <option value="床架">窗架</option>
+          <option value="床架">床架</option>
           <option value="收納">收納</option>
           <option value="窗簾">窗簾</option>
         </select>
-        <p class="searchResult text-darkGray mb-0" style="width: 255px">本次搜尋共 3 筆資料</p>
+        <p class="searchResult text-darkGray mb-0" style="width: 255px"></p>
       </div>
       <ul class="list-unstyled row productList">
-        <li class="col h-100 position-relative">
-          <span class="bg-dark text-white fs-5 px-6 py-2 position-absolute" style="top: 12px;right: 8px;">新品</span>
-          <img src="../assets/images/BefHmH2.png" class="card-img-top" alt="產品圖片-${item.title}">
-          <input type="button" value="加入購物車" class="bg-dark fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}">
-          <div class="card-body">
-            <h5 class="card-title fs-5 py-2">${item.title}</h5>
-            <p class="card-text fs-5"><del>${item.origin_price}</del></p>
-            <p class="card-text fs-3">${item.price}</p>
-            <input type="hidden" class="quantityInput" value="1">
-          </div>
-        </li>
+        
       </ul>
     </section>
     <!------- 購物車 ------->
@@ -285,23 +271,16 @@
               </tr>
             </thead>
             <tbody id="cartItem">
-              <tr class="text-nowrap fs-5">
-                <td class="d-flex py-5">
-                  <img src="${item.images}" class="card-img-top me-4" alt="產品圖片-${item.title}">
-                  <p>${item.title}</p>
-                </td>
-                <td class="py-5">${item.price}</td>
-                <td class="py-5">${item.quantity}</td>
-                <td class="py-5">${item.price}</td>
-                <td class="py-5">
-                  <a href="#" class="delCartItemBtn d-block d-flex justify-content-center align-items-center text-decoration-none" data-id="${item.id}">
-                    <span class="material-symbols-outlined text-dark" style="font-size: 24px;">
-                      close
-                    </span>
-                  </a>
-                </td>
-              </tr>
             </tbody>
+            <tr>
+              <td class="py-5 border-bottom-0">
+                <a href="#" class="d-inline-block rounded fs-5 px-5 py-2 text-dark text-decoration-none btn btn-warning">清除全部訂單</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td>總金額：</td>
+              <td id="cartFinalTotal"></td>
+            </tr>
           </table>
         </div>
       </div>
@@ -354,7 +333,9 @@
 
 
 
-
     <script type="module" src="../main.js"></script>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="../assets/js/index.js"></script>
+
   </body>
 </html>
