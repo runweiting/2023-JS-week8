@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /* 共用 ------- */
 const config = {
     headers: {

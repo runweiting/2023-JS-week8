@@ -1,3 +1,6 @@
+import axios from 'axios';
+import validate from 'validate.js';
+
 /* 共用 ------- */
 const config = {
     headers: {
@@ -9,10 +12,12 @@ const config = {
 const customerUrl = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/runweiting';
 const productUrl = `${customerUrl}/products`;
 const cartUrl = `${customerUrl}/carts`;
+const orderUrl = `${customerUrl}/orders`;
 
 let filterProductData = [];
 let productData = [];
 let cartData = [];
+let orderData = { "data": { "user": '' } };
 
 // 1-1. GET 取得產品列表 -> getProductList() 
 function getProductList(){
@@ -216,5 +221,94 @@ function removeCartAll(e){
     })
 };
 
+// 6. POST 送出訂單 -> addOrder()
+// 新增資料 orderData、validate.js 表單驗證
+const addOrderForm = document.querySelector('.addOrderForm');
+const addOrderBtn = document.querySelector('.addOrderBtn');
+const customerName = document.querySelector('#customerName');
+const customerTel = document.querySelector('#customerTel');
+const customerEmail = document.querySelector('#customerEmail');
+const customerAdd = document.querySelector('#customerAdd');
+const payment = document.querySelector('#payment');
+addOrderBtn.addEventListener('click',function(){
+    let user = {};
+    user["name"] = customerName.value.trim();
+    user["tel"] = customerTel.value.trim();
+    user["email"] = customerEmail.value.trim();
+    user["address"] = customerAdd.value.trim();
+    user["payment"] = payment.value.trim();
+    // if 判斷：是否每個欄位都有填寫？
+    // includes() 判斷陣列是否包含特定的元素，回傳 true 或 false
+    if (Object.values(user).includes('')){
+        alert('每個欄位都為必填！')
+    } else {
+        orderData["data"]["user"] = user;
+        addOrderForm.reset();
+        addOrder();
+    };
+});
+const constraints = {
+    customerName: {
+        presence: {
+            message: "^必填！"
+        }
+    },
+    customerTel: {
+        presence: {
+            message: "^必填！"
+        }
+    },
+    customerEmail: {
+        email: {
+            email: true,
+            message: "^請輸入有效的電子郵件地址！"
+        },
+        presence: {
+            message: "^必填！"
+        }
+    },
+    customerAdd: {
+        presence: {
+            message: "^必填！"
+        }
+    },
+    payment: {
+        presence: {
+            message: "^必填！"
+        }
+    }
+};
+const inputs = document.querySelectorAll('input[type="text"],select[name="payment"]');
+inputs.forEach((item)=>{
+    item.addEventListener('change',function(){
+        // 1. 清空錯誤提示
+        const errorsMessage = document.querySelector(`.${item.name}`);
+        errorsMessage.innerHTML = ``;
+        // 2. 儲存回傳訊息
+        let errors = validate(addOrderForm,constraints);
+        console.log(errors);
+        // 3. 利用 key 作為 ('.${key}') 顯示 errors value
+        if (errors){
+            Object.keys(errors).forEach(key =>{
+                document.querySelector(`.${key}`).innerHTML = `<p class="d-flex align-items-center text-danger mb-2">
+                <span class="material-symbols-outlined me-1">error</span>${errors[key]}
+              </p>`;
+            });
+        };  
+    });
+});
 
+function addOrder(){
+    console.log(orderData);
+    axios
+    .post(orderUrl,orderData)
+    .then((postRes)=>{
+        alert("已成功送出預定資料！");
+        console.log(postRes.data)
+    })
+    .catch((postErr)=>{
+        alert('請稍後再試');
+        console.log(postErr.data)
+    });
+};
 

@@ -276,10 +276,10 @@
               <td class="py-5 border-bottom-0">
                 <a href="#" class="d-inline-block rounded fs-5 px-5 py-2 text-dark text-decoration-none btn btn-warning removeAllBtn">清除全部訂單</a>
               </td>
-              <td></td>
-              <td></td>
-              <td>總金額：</td>
-              <td id="cartFinalTotal"></td>
+              <td class="border-bottom-0"></td>
+              <td class="border-bottom-0"></td>
+              <td class="border-bottom-0">總金額：</td>
+              <td class="border-bottom-0" id="cartFinalTotal"></td>
             </tr>
           </table>
         </div>
@@ -302,7 +302,7 @@
             <label for="customerTel" class="mb-2">電話</label>
             <input type="text" id="customerTel" placeholder="請輸入電話" name="customerTel">
           </div>
-          <div class="errors-message customerName"></div>
+          <div class="errors-message customerTel"></div>
           <!-- 3. Email -->
           <div class="d-flex flex-column mb-5">
             <label for="customerEmail" class="mb-2">Email</label>
@@ -332,8 +332,7 @@
     </section>
 
     <script type="module" src="../main.js"></script>
-    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-    <script src="../assets/js/index.js"></script>
+    <script type="module" src="../assets/js/index.js"></script>
 
   </body>
 </html>
