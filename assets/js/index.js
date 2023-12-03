@@ -64,7 +64,7 @@ function renderProduct(category = "全部商品"){
         <li class="col-3 h-100 position-relative">
             <span class="bg-dark text-white fs-5 px-6 py-2 position-absolute" style="top: 12px;right: 8px;">新品</span>
             <img src="${item.images}" class="card-img-top" alt="產品圖片-${item.title}">
-            <input type="button" value="加入購物車" class="bg-dark fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}">
+            <input type="button" value="加入購物車" class="bg-dark fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}" data-title="${item.title}">
             <div class="card-body">
             <h5 class="card-title fs-5 py-2">${item.title}</h5>
             <p class="card-text fs-5"><del>${item.origin_price}</del></p>
@@ -83,7 +83,8 @@ function renderProduct(category = "全部商品"){
     addCartItemBtn.forEach((item)=>{
         item.addEventListener('click',(e)=>{
             const targetID = e.target.dataset.id;
-            postCartItem(targetID);
+            const targetItem = e.target.dataset.title;
+            postCartItem(targetID,targetItem);
         })
     });
 };
@@ -106,7 +107,7 @@ function renderCartList(array,total){
         <td class="py-5">${item.quantity}</td>
         <td class="py-5">${(item.product.price)*(item.quantity)}</td>
         <td class="py-5">
-          <a href="#" class="removeBtn d-flex justify-content-center align-items-center text-decoration-none" data-id="${item.id}">
+          <a href="#" class="removeBtn d-flex justify-content-center align-items-center text-decoration-none" data-id="${item.id}" data-title="${item.product.title}">
             <span class="material-symbols-outlined text-dark" style="font-size: 24px;">
               close
             </span>
@@ -126,7 +127,7 @@ function renderCartList(array,total){
 
 // 3. POST 加入購物車 -> postCartItem()
 // note: 先 GET 檢查是否有相同商品，有 PATCH +1，無 POST 1
-function postCartItem(targetID){
+function postCartItem(targetID,targetItem){
     const postData = {
         "data": {
           "productId": targetID,
@@ -162,7 +163,8 @@ function postCartItem(targetID){
             axios
             .post(cartUrl,postData)
             .then((postRes)=>{
-                alert('已成功加入購物車！');
+                //console.log(postRes.data.carts.product.title);
+                alert(`${targetItem}，已成功加入購物車！`);
                 getCartList();
                 console.log(postRes.data.carts)
             })
@@ -182,11 +184,12 @@ function postCartItem(targetID){
 function removeCartItem(e){
     e.preventDefault();
     const targetID = e.currentTarget.dataset.id;
+    const targetTitle = e.currentTarget.dataset.title;
     const deleteCartItemUrl = `${cartUrl}/${targetID}`;
     axios
     .delete(deleteCartItemUrl,config)
     .then((delRes)=>{
-        alert(`購物車編號：${targetID} 已刪除`);
+        alert(`商品品項：${targetTitle}，已成功刪除。`);
         getProductList();
         getCartList();
         console.log(delRes.data);
