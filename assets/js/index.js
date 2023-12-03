@@ -23,11 +23,6 @@ function getProductList(){
         renderProduct();
         console.log(res.data)
     })
-    // -> 加入監聽
-    .then(()=>{
-        
-        //renderProduct();
-    })
     .catch((err)=>{
         console.log(err)
     })
@@ -51,6 +46,7 @@ function getCartList(){
 getCartList();
 
 // 1-2. 渲染、篩選產品列表 -> renderProductList()
+// 裡面有監聽：categorySearch、addCartItemBtn
 function renderProduct(category = "全部商品"){
     filterProductData = category === "全部商品" ?
     productData : productData.filter(item =>
@@ -84,12 +80,13 @@ function renderProduct(category = "全部商品"){
         item.addEventListener('click',(e)=>{
             const targetID = e.target.dataset.id;
             const targetItem = e.target.dataset.title;
-            postCartItem(targetID,targetItem);
+            addCartItem(targetID,targetItem);
         })
     });
 };
 
 // 2-2. 渲染購物車列表 -> renderCartList()
+// 裡面有監聽：removeBtn
 function renderCartList(array,total){
     const cartItem = document.querySelector('#cartItem');
     const cartFinalTotal = document.querySelector('#cartFinalTotal');
@@ -125,9 +122,9 @@ function renderCartList(array,total){
     });
 };
 
-// 3. POST 加入購物車 -> postCartItem()
+// 3. PATCH/POST 加入購物車 -> addCartItem()
 // note: 先 GET 檢查是否有相同商品，有 PATCH +1，無 POST 1
-function postCartItem(targetID,targetItem){
+function addCartItem(targetID,targetItem){
     const postData = {
         "data": {
           "productId": targetID,
@@ -150,7 +147,7 @@ function postCartItem(targetID,targetItem){
                 }
               })
             .then((patchRes)=>{
-                alert(`${existingCartItem.product.title} 數量 +1`);
+                alert(`${existingCartItem.product.title}，數量 +1！`);
                 getCartList();
                 console.log(patchRes.data);
             })
@@ -187,7 +184,7 @@ function removeCartItem(e){
     const targetTitle = e.currentTarget.dataset.title;
     const deleteCartItemUrl = `${cartUrl}/${targetID}`;
     axios
-    .delete(deleteCartItemUrl,config)
+    .delete(deleteCartItemUrl)
     .then((delRes)=>{
         alert(`商品品項：${targetTitle}，已成功刪除。`);
         getProductList();
@@ -200,8 +197,24 @@ function removeCartItem(e){
     })
 };
 
-// 5. DELETE 刪除購物車 -> removeCart()
-
+// 5. DELETE 刪除購物車 -> removeCartAll()
+const removeAllBtn = document.querySelector('.removeAllBtn');
+removeAllBtn.addEventListener('click',removeCartAll);
+function removeCartAll(e){
+    e.preventDefault();
+    axios
+    .delete(cartUrl)
+    .then((delRes)=>{
+        alert('全部品項已成功刪除。');
+        getProductList();
+        getCartList();
+        console.log(delRes.data);
+    })
+    .catch((delErr)=>{
+        alert('請稍後再試');
+        console.log(delErr);
+    })
+};
 
 
 
