@@ -1,13 +1,6 @@
 import axios from 'axios';
 import validate from 'validate.js';
 
-/* 共用 ------- */
-const config = {
-    headers: {
-        'Authorization':'CXLvMgR3dAaogAeoJqJ2IhKaL4P2'
-    }
-};
-
 /* 前台 url ------- */
 const customerUrl = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/runweiting';
 const productUrl = `${customerUrl}/products`;
@@ -19,7 +12,7 @@ let productData = [];
 let cartData = [];
 let orderData = { "data": { "user": '' } };
 
-// 1-1. GET 取得產品列表 -> getProductList() 
+// 1-1. GET 取得產品列表 -> getProductList() -> renderProduct()
 function getProductList(){
     axios
     .get(productUrl)
@@ -33,14 +26,15 @@ function getProductList(){
     })
 };
 getProductList();
-// 2-1. GET 取得購物車列表 -> getCartList()
+
+// 2-1. GET 取得購物車列表 -> getCartList() -> renderCartList()
 function getCartList(){
     axios
     .get(cartUrl)
     .then((res)=>{
         cartData = res.data.carts;
-        let cartFinalTotal = res.data.total;
-        renderCartList(cartData,cartFinalTotal);
+        let cartFinalTotalNum = res.data.total;
+        renderCartList(cartData,cartFinalTotalNum);
         console.log(res.data)
     })
     // ->
@@ -92,9 +86,10 @@ function renderProduct(category = "全部商品"){
 
 // 2-2. 渲染購物車列表 -> renderCartList()
 // 裡面有監聽：removeBtn
+const cartItem = document.querySelector('#cartItem');
+const cartFinalTotal = document.querySelector('#cartFinalTotal');
+const cartFinalTotalNum = document.querySelector('#cartFinalTotalNum');
 function renderCartList(array,total){
-    const cartItem = document.querySelector('#cartItem');
-    const cartFinalTotal = document.querySelector('#cartFinalTotal');
     let str = '';
     array.forEach((item)=>{
         str += `
@@ -118,8 +113,9 @@ function renderCartList(array,total){
       </tr>`;
     });
     cartItem.innerHTML = str;
+    
     // 使用 Intl.NumberFormat 來格式化數字，再 formatter.format(number) 將數字格式化為字串
-    cartFinalTotal.textContent = `NT$ ${total.toLocaleString('en-US')}`;
+    cartFinalTotalNum.textContent = `NT$ ${total.toLocaleString('en-US')}`;
     // -> 在每次渲染後，重新設定按鈕監聽
     const removeBtn = document.querySelectorAll('.removeBtn');
     removeBtn.forEach((item)=>{
@@ -128,7 +124,7 @@ function renderCartList(array,total){
 };
 
 // 3. PATCH/POST 加入購物車 -> addCartItem()
-// note: 先 GET 檢查是否有相同商品，有 PATCH +1，無 POST 1
+// 先 GET 檢查是否有相同商品，有 PATCH +1，無 POST 1
 function addCartItem(targetID,targetItem){
     const postData = {
         "data": {
@@ -136,7 +132,7 @@ function addCartItem(targetID,targetItem){
           "quantity": 1
         }
       };
-    // 先檢查是否有相同商品
+    // 先 GET 檢查是否有相同商品
     axios
     .get(cartUrl)
     .then((res)=>{
@@ -213,6 +209,7 @@ function removeCartAll(e){
         alert('全部品項已成功刪除。');
         getProductList();
         getCartList();
+        updateCart();
         console.log(delRes.data);
     })
     .catch((delErr)=>{
@@ -222,7 +219,7 @@ function removeCartAll(e){
 };
 
 // 6. POST 送出訂單 -> addOrder()
-// 新增資料 orderData、validate.js 表單驗證
+// 先新增資料 orderData
 const addOrderForm = document.querySelector('.addOrderForm');
 const addOrderBtn = document.querySelector('.addOrderBtn');
 const customerName = document.querySelector('#customerName');
@@ -247,6 +244,7 @@ addOrderBtn.addEventListener('click',function(){
         addOrder();
     };
 });
+// 再validate.js 表單驗證
 const constraints = {
     customerName: {
         presence: {
@@ -297,13 +295,14 @@ inputs.forEach((item)=>{
         };  
     });
 });
-
+// addOrder()
 function addOrder(){
     console.log(orderData);
     axios
     .post(orderUrl,orderData)
     .then((postRes)=>{
         alert("已成功送出預定資料！");
+        updateCart();
         console.log(postRes.data)
     })
     .catch((postErr)=>{
@@ -311,4 +310,9 @@ function addOrder(){
         console.log(postErr.data)
     });
 };
-
+// 清除購物車顯示資料
+function updateCart(){
+    cartItem.innerHTML = ``;
+    cartFinalTotal.textContent = "購物車目前是空的。";
+    cartFinalTotalNum.textContent = "NT$ 0";
+};

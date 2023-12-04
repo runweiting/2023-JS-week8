@@ -13,7 +13,7 @@ const ordersUrl = `${adminUrl}/orders`;
 
 let orderData = [];
 
-// 1：GET 取得訂單列表 getOrderList()
+// 1-1. GET 取得訂單列表 -> getOrderList() -> renderOrder()
 function getOrderList(){
     axios
     .get(ordersUrl,config)
@@ -26,7 +26,9 @@ function getOrderList(){
         console.log(err)
     })
 };
-// 渲染訂單列表 -> renderOrder() 
+getOrderList();
+
+// 1-2. 渲染訂單列表 -> renderOrder() 
 function renderOrder(array){
     const orderItem = document.querySelector('#orderItem');
     if (!orderItem) {
@@ -72,7 +74,7 @@ function renderOrder(array){
     })
 };
 
-// 2. PUT 修改訂單狀態 changeOrderStatus()
+// 2-1. PUT 修改訂單狀態 -> changeOrderStatus()
 function changeOrderStatus(e){
     e.preventDefault();
     const orderId = e.target.dataset.id;
@@ -96,7 +98,8 @@ function changeOrderStatus(e){
         console.log(putErr)
     })
 };
-// 渲染訂單狀態 -> renderOrderStatus()
+
+// 2-2. 渲染訂單狀態 -> renderOrderStatus()
 function renderOrderStatus(orderId,paid){
     const statusBtn = document.querySelector(`.statusBtn[data-id="${orderId}"]`);
     statusBtn.textContent = paid ? "已處理" : "未處理"
@@ -132,4 +135,4 @@ function removeAllorders(e){
     })
 };
 
-getOrderList();
+
