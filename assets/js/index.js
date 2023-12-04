@@ -34,6 +34,11 @@ function getCartList(){
     .then((res)=>{
         cartData = res.data.carts;
         let cartFinalTotalNum = res.data.finalTotal;
+        if (cartData.length == 0){
+            removeAllBtn.classList.add('d-none')
+        } else {
+            removeAllBtn.classList.remove('d-none')
+        };
         renderCartList(cartData,cartFinalTotalNum);
         console.log(res.data)
     })
