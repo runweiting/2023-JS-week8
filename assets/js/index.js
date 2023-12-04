@@ -90,6 +90,7 @@ const cartItem = document.querySelector('#cartItem');
 const cartFinalTotal = document.querySelector('#cartFinalTotal');
 const cartFinalTotalNum = document.querySelector('#cartFinalTotalNum');
 function renderCartList(array,total){
+    cartFinalTotal.textContent = "總金額：";
     let str = '';
     array.forEach((item)=>{
         str += `
@@ -113,7 +114,6 @@ function renderCartList(array,total){
       </tr>`;
     });
     cartItem.innerHTML = str;
-    
     // 使用 Intl.NumberFormat 來格式化數字，再 formatter.format(number) 將數字格式化為字串
     cartFinalTotalNum.textContent = `NT$ ${total.toLocaleString('en-US')}`;
     // -> 在每次渲染後，重新設定按鈕監聽
@@ -188,7 +188,6 @@ function removeCartItem(e){
     .delete(deleteCartItemUrl)
     .then((delRes)=>{
         alert(`商品品項：${targetTitle}，已成功刪除。`);
-        getProductList();
         getCartList();
         console.log(delRes.data);
     })
@@ -207,9 +206,7 @@ function removeCartAll(e){
     .delete(cartUrl)
     .then((delRes)=>{
         alert('全部品項已成功刪除。');
-        getProductList();
         getCartList();
-        updateCart();
         console.log(delRes.data);
     })
     .catch((delErr)=>{
