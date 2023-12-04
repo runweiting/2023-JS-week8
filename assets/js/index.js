@@ -33,7 +33,7 @@ function getCartList(){
     .get(cartUrl)
     .then((res)=>{
         cartData = res.data.carts;
-        let cartFinalTotalNum = res.data.total;
+        let cartFinalTotalNum = res.data.finalTotal;
         renderCartList(cartData,cartFinalTotalNum);
         console.log(res.data)
     })
@@ -311,5 +311,5 @@ function addOrder(){
 function updateCart(){
     cartItem.innerHTML = ``;
     cartFinalTotal.textContent = "購物車目前是空的。";
-    cartFinalTotalNum.textContent = "NT$ 0";
+    cartFinalTotalNum.textContent = 'NT$ 0';
 };
