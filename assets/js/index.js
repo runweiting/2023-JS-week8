@@ -99,7 +99,7 @@ function renderCartList(array,total){
     let str = '';
     array.forEach((item)=>{
         str += `
-        <tr class="text-nowrap fs-5">
+        <tr class="fs-5">
         <td class="d-flex align-items-center py-5">
           <div class="overflow-hidden" style="height: 80px;">
             <img src="${item.product.images}" class="me-4" alt="產品圖片-${item.product.title}" style="width: 80px">
