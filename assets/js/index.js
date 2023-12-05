@@ -1,5 +1,6 @@
 import axios from 'axios';
 import validate from 'validate.js';
+import Swal from 'sweetalert2';
 
 /* 前台 url ------- */
 const customerUrl = 'https://livejs-api.hexschool.io/api/livejs/v1/customer/runweiting';
@@ -19,11 +20,7 @@ function getProductList(){
     .then((res)=>{
         productData = res.data.products;
         renderProduct();
-        console.log(productData)
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
+    });
 };
 getProductList();
 
@@ -40,12 +37,7 @@ function getCartList(){
             removeAllBtn.classList.remove('d-none')
         };
         renderCartList(cartData,cartFinalTotalNum);
-        console.log(cartData)
-    })
-    // ->
-    .catch((err)=>{
-        console.log(err)
-    })
+    });
 };
 getCartList();
 
@@ -153,34 +145,27 @@ function addCartItem(targetID,targetItem){
                 }
               })
             .then((patchRes)=>{
-                alert(`${existingCartItem.product.title}，數量 +1！`);
+                Swal.fire({
+                    title: `${existingCartItem.product.title}`,
+                    text: "數量 +1！",
+                    icon: "success"
+                  });
                 getCartList();
-                console.log(patchRes.data);
-            })
-            .catch((patchErr)=>{
-                alert('請稍後再試');
-                console.log(patchErr)
             })
         } else {
             // 無 POST 1
             axios
             .post(cartUrl,postData)
             .then((postRes)=>{
-                //console.log(postRes.data.carts.product.title);
-                alert(`${targetItem}，已成功加入購物車！`);
+                Swal.fire({
+                    title: `${targetItem}`,
+                    text: "已成功加入購物車！",
+                    icon: "success"
+                  });
                 getCartList();
-                console.log(postRes.data.carts)
-            })
-            .catch((postErr)=>{
-                alert('請稍後再試');
-                console.log(postErr)
-            })
+            });
         };
-        console.log(res.data);
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
+    });
 };
 
 // 4. DELETE 刪除購物車特定商品 -> removeCartItem()
@@ -192,13 +177,12 @@ function removeCartItem(e){
     axios
     .delete(deleteCartItemUrl)
     .then((delRes)=>{
-        alert(`商品品項：${targetTitle}，已成功刪除。`);
+        Swal.fire({
+            title: `${targetTitle}`,
+            text: "已成功刪除。",
+            icon: "success"
+          });
         getCartList();
-        console.log(delRes.data);
-    })
-    .catch((delErr)=>{
-        alert('請稍後再試');
-        console.log(delErr);
     })
 };
 
@@ -210,13 +194,12 @@ function removeCartAll(e){
     axios
     .delete(cartUrl)
     .then((delRes)=>{
-        alert('全部品項已成功刪除。');
+        Swal.fire({
+            title: "全部品項",
+            text: "已成功刪除。",
+            icon: "success"
+          });
         getCartList();
-        console.log(delRes.data);
-    })
-    .catch((delErr)=>{
-        alert('請稍後再試');
-        console.log(delErr);
     })
 };
 
@@ -239,7 +222,7 @@ addOrderBtn.addEventListener('click',function(){
     // if 判斷：是否每個欄位都有填寫？
     // includes() 判斷陣列是否包含特定的元素，回傳 true 或 false
     if (Object.values(user).includes('')){
-        alert('每個欄位都為必填！')
+        Swal.fire("每個欄位都為必填！");
     } else {
         orderData["data"]["user"] = user;
         addOrderForm.reset();
@@ -286,7 +269,6 @@ inputs.forEach((item)=>{
         errorsMessage.innerHTML = ``;
         // 2. 儲存回傳訊息
         let errors = validate(addOrderForm,constraints);
-        // console.log(errors);
         // 3. 利用 key 作為 ('.${key}') 顯示 errors value
         if (errors){
             Object.keys(errors).forEach(key =>{
@@ -302,14 +284,9 @@ function addOrder(){
     axios
     .post(orderUrl,orderData)
     .then((postRes)=>{
-        alert("已成功送出預定資料！");
+        Swal.fire("已成功送出預定資料！");
         updateCart();
-        console.log(postRes.data)
     })
-    .catch((postErr)=>{
-        alert('請稍後再試');
-        console.log(postErr.data)
-    });
 };
 // 清除購物車顯示資料
 function updateCart(){

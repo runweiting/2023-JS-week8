@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 /* 共用 ------- */
 const config = {
@@ -21,10 +22,6 @@ function getOrderList(){
     .then((res)=>{
         orderData = res.data.orders;
         renderOrder(orderData);
-        console.log(orderData)
-    })
-    .catch((err)=>{
-        console.log(err)
     })
 };
 getOrderList();
@@ -94,16 +91,15 @@ function changeOrderStatus(e){
             }
         },
     config)
-    // ->
     .then((putRes)=>{
-        console.log(putRes.data);
-        alert(`訂單編號：${orderId} 已處理`);
+        Swal.fire({
+            title: `訂單編號：${orderId}`,
+            text: "已處理成功。",
+            icon: "success"
+          });
         renderOrderStatus(orderId,putRes.data.paid);
         getOrderList();
-    })
-    .catch((putErr)=>{
-        console.log(putErr)
-    })
+    });
 };
 
 // 2-2. 渲染訂單狀態 -> renderOrderStatus()
@@ -118,13 +114,12 @@ function removeOrderItem(e){
     axios
     .delete(deleteOrderUrl,config)
     .then((delRes)=>{
-        alert(`訂單編號：${e.target.dataset.id} 已刪除`);
+        Swal.fire({
+            title: `訂單編號：${e.target.dataset.id}`,
+            text: "已成功刪除。",
+            icon: "success"
+          });
         getOrderList();
-        console.log(delRes.data);
-    })
-    .catch((delErr)=>{
-        alert('請稍後再試');
-        console.log(delErr)
     })
 };
 
@@ -133,12 +128,12 @@ function removeAllorders(e){
     axios
     .delete(ordersUrl,config)
     .then((delRes)=>{
-        console.log(delRes.data);
-        alert('成功刪除全部訂單');
+        Swal.fire({
+            title: "全部品項",
+            text: "已成功刪除。",
+            icon: "success"
+          });
         getOrderList();
-    })
-    .catch((delErr)=>{
-        console.log(delErr)
     })
 };
 
@@ -171,14 +166,12 @@ function renderChartAll(){
     Object.entries(categoryNum)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    // console.log(chartAllData);
     // 最大的 value 指定為最深的顏色
     const maxQuantityItem = Math.max(...Object.values(categoryNum));
     // map + 三元運算式將 color 依據 value 排序
     let colorOrders = 
     chartAllData.map(([key, value]) =>
     value === maxQuantityItem ? '#5434A7' : value > Math.floor(maxQuantityItem / 2)? '#9D7FEA' : '#DACBFF');
-    // console.log(colorOrders); 
     let chartAll = c3.generate({
         bindto: '.chartAll',
         data: {
@@ -209,8 +202,6 @@ function renderChartItem(){
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{
             const { title, quantity } = product;
-            // console.log(product);
-            // console.log(product.quantity);
             if (categoryNum[title] === undefined){
                 categoryNum[title] = quantity
             } else {
@@ -218,13 +209,11 @@ function renderChartItem(){
             }
         })
     });
-    // console.log(categoryNum);
     // 將物件轉換成陣列，並按照數量降序排序
     let chartItemData = 
     Object.entries(categoryNum)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    // console.log(chartItemData);
     // 選取前三名
     let top3 = chartItemData.slice(0,3);
     // 計算「其它」的總數
@@ -232,11 +221,9 @@ function renderChartItem(){
     if (otherTotal > 0){
         top3.push(["其他",otherTotal]);
     };
-    // console.log(top3);
     let colorOrders = top3.map(([key, value], index) => 
         index === 0 ? '#301E5F' : index === 1 ? '#5434A7' : index === 2 ? '#9D7FEA' : '#DACBFF'
     );
-    // console.log(colorOrders);
     let chartItem = c3.generate({
         bindto: '.chartItem',
         data: {
