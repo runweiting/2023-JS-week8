@@ -11,41 +11,49 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg border-bottom border-40 border-dark">
-      <div class="container-xl py-10">
-        <div>
-            <a class="navbar-brand fw-bold fs-4 text-dark" href="index.html">WOWOROOM</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="container py-10">
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold fs-4 text-dark d-inline-block" href="index.html">WOWOROOM</a>
+            <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link fs-5" aria-current="page" href="#">後台管理</a>
+                    <a class="nav-link active fs-5" aria-current="page" href="#">床墊優勢</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fs-5 active" href="#">管理員登入</a>
+                    <a class="nav-link fs-5" href="#">好評推薦</a>
+                </li>
+                <li class="nav-item fs-5">
+                    <a class="nav-link" href="#">運送方式</a>
+                </li>
+                <li class="nav-item fs-5">
+                    <a class="nav-link" href="#">立即預訂</a>
                 </li>
             </ul>
         </div>
       </div>
     </nav>
-    <section class="container-xl d-flex justify-content-center mb-20">
-      <div class="col-6">
-        <h2 class="fs-7 text-center py-15 mb-0">全產品類別營收比重</h2>
-        <div class="chartAll"></div>
-      </div>
-      <div class="col-6">
-        <h2 class="fs-7 text-center py-15 mb-0">全品項營收比重</h2>
-        <div class="chartItem"></div>
+    <section class="container d-flex justify-content-center mb-20">
+      <div class="row">
+        <div class="col">
+          <h2 class="fs-7 text-center py-15 mb-0">全產品類別營收比重</h2>
+          <div class="chartAll"></div>
+        </div>
+        <div class="col">
+          <h2 class="fs-7 text-center py-15 mb-0">全品項營收比重</h2>
+          <div class="chartItem"></div>
+        </div>
       </div>
     </section>
-    <section class="container-xl">
+    <section class="container">
       <div class="d-flex justify-content-end">
         <a href="#" class="d-inline-block rounded fs-5 px-5 py-2 text-dark text-decoration-none btn btn-warning">清除全部訂單</a>
       </div>
-      <div class="orderTable d-block py-4 mb-27">
-        <table class="table table-hover table-bordered align-middle">
+      <div class="orderTable table-responsive py-4 mb-27">
+        <table class="table table-hover table-bordered align-middle text-nowrap">
           <thead>
             <tr>
               <th scope="col">訂單編號</th>
