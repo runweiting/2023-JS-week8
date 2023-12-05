@@ -19,7 +19,7 @@ function getProductList(){
     .then((res)=>{
         productData = res.data.products;
         renderProduct();
-        console.log(res.data)
+        console.log(productData)
     })
     .catch((err)=>{
         console.log(err)
@@ -40,7 +40,7 @@ function getCartList(){
             removeAllBtn.classList.remove('d-none')
         };
         renderCartList(cartData,cartFinalTotalNum);
-        console.log(res.data)
+        console.log(cartData)
     })
     // ->
     .catch((err)=>{
@@ -286,7 +286,7 @@ inputs.forEach((item)=>{
         errorsMessage.innerHTML = ``;
         // 2. 儲存回傳訊息
         let errors = validate(addOrderForm,constraints);
-        console.log(errors);
+        // console.log(errors);
         // 3. 利用 key 作為 ('.${key}') 顯示 errors value
         if (errors){
             Object.keys(errors).forEach(key =>{
@@ -299,7 +299,6 @@ inputs.forEach((item)=>{
 });
 // addOrder()
 function addOrder(){
-    console.log(orderData);
     axios
     .post(orderUrl,orderData)
     .then((postRes)=>{

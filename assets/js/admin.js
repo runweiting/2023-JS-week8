@@ -21,6 +21,7 @@ function getOrderList(){
     .then((res)=>{
         orderData = res.data.orders;
         renderOrder(orderData);
+        console.log(orderData)
     })
     .catch((err)=>{
         console.log(err)
@@ -170,14 +171,14 @@ function renderChartAll(){
     Object.entries(categoryNum)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    console.log(chartAllData);
+    // console.log(chartAllData);
     // 最大的 value 指定為最深的顏色
     const maxQuantityItem = Math.max(...Object.values(categoryNum));
     // map + 三元運算式將 color 依據 value 排序
     let colorOrders = 
     chartAllData.map(([key, value]) =>
     value === maxQuantityItem ? '#5434A7' : value > Math.floor(maxQuantityItem / 2)? '#9D7FEA' : '#DACBFF');
-    console.log(colorOrders); 
+    // console.log(colorOrders); 
     let chartAll = c3.generate({
         bindto: '.chartAll',
         data: {
@@ -208,8 +209,8 @@ function renderChartItem(){
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{
             const { title, quantity } = product;
-            console.log(product);
-            console.log(product.quantity);
+            // console.log(product);
+            // console.log(product.quantity);
             if (categoryNum[title] === undefined){
                 categoryNum[title] = quantity
             } else {
@@ -217,13 +218,13 @@ function renderChartItem(){
             }
         })
     });
-    console.log(categoryNum);
+    // console.log(categoryNum);
     // 將物件轉換成陣列，並按照數量降序排序
     let chartItemData = 
     Object.entries(categoryNum)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    console.log(chartItemData);
+    // console.log(chartItemData);
     // 選取前三名
     let top3 = chartItemData.slice(0,3);
     // 計算「其它」的總數
@@ -231,11 +232,11 @@ function renderChartItem(){
     if (otherTotal > 0){
         top3.push(["其他",otherTotal]);
     };
-    console.log(top3);
+    // console.log(top3);
     let colorOrders = top3.map(([key, value], index) => 
         index === 0 ? '#301E5F' : index === 1 ? '#5434A7' : index === 2 ? '#9D7FEA' : '#DACBFF'
     );
-    console.log(colorOrders);
+    // console.log(colorOrders);
     let chartItem = c3.generate({
         bindto: '.chartItem',
         data: {
