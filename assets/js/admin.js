@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-/* 共用 ------- */
+/* config ------- */
 const config = {
     headers: {
         'Authorization':'CXLvMgR3dAaogAeoJqJ2IhKaL4P2'

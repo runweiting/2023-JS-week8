@@ -56,7 +56,7 @@ function renderProduct(category = "全部商品"){
         <li class="col-3 h-100 position-relative">
             <span class="bg-dark text-white fs-5 px-6 py-2 position-absolute" style="top: 12px;right: 8px;">新品</span>
             <img src="${item.images}" class="card-img-top" alt="產品圖片-${item.title}">
-            <input type="button" value="加入購物車" class="bg-dark fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}" data-title="${item.title}">
+            <input type="button" value="加入購物車" class="btn btn-dark rounded-0 fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}" data-title="${item.title}">
             <div class="card-body">
             <h5 class="card-title fs-5 py-2">${item.title}</h5>
             <p class="card-text fs-5"><del>${item.origin_price}</del></p>
