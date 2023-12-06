@@ -22,6 +22,8 @@ function getOrderList(){
     .then((res)=>{
         orderData = res.data.orders;
         renderOrder(orderData);
+        render3cChartAll(orderData);
+        render3cChartItem(orderData);
     })
 };
 getOrderList();
@@ -61,27 +63,29 @@ function renderOrder(array){
         </tr>`;      
     });
     orderItem.innerHTML = str;
-    // -> 在每次渲染後，重新設定按鈕監聽
-    const statusBtn = document.querySelectorAll('.statusBtn');
-    statusBtn.forEach((item)=>{
-        item.addEventListener('click',changeOrderStatus);
-    });
-    const removeBtn = document.querySelectorAll('.removeBtn');
-    removeBtn.forEach((item)=>{
-        item.addEventListener('click',removeOrderItem);
-    });
-    const removeAllBtn = document.querySelectorAll('.btn-warning');
-    removeAllBtn.forEach((item)=>{
-        item.addEventListener('click',removeAllorders);
-    });
-    renderChartAll(orderData);
-    renderChartItem(orderData);
 };
 
-// 2-1. PUT 修改訂單狀態 -> changeOrderStatus()
-function changeOrderStatus(e){
+// 1.3 監聽 statusBtn、removeBtn、removeAllBtn
+// (看錄影後修正：綁大範圍 orderTable)
+const orderTable = document.querySelector('.orderTable');
+orderTable.addEventListener('click',(e)=>{
     e.preventDefault();
-    const orderId = e.target.dataset.id;
+    let targetClass = e.target.getAttribute('class');
+    const orderId = e.target.getAttribute('data-id');
+    if (targetClass == "statusBtn"){
+        changeOrderStatus(orderId);
+    };
+    if (targetClass == "removeBtn"){
+        removeOrderItem(orderId);
+    };
+    const removeAllBtn = e.target.dataset.btn;
+    if (removeAllBtn == "removeAllBtn"){
+        removeAllorders();
+    };
+});
+
+// 2-1. PUT 修改訂單狀態 -> changeOrderStatus()
+function changeOrderStatus(orderId){
     axios
     .put(ordersUrl,
         {
@@ -109,13 +113,13 @@ function renderOrderStatus(orderId,paid){
 };
 
 // 3. DELETE 刪除特定訂單 -> removeOrderItem() 
-function removeOrderItem(e){
-    const deleteOrderUrl = `${ordersUrl}/${e.target.dataset.id}`;
+function removeOrderItem(orderId){
+    const deleteOrderUrl = `${ordersUrl}/${orderId}`;
     axios
     .delete(deleteOrderUrl,config)
     .then((delRes)=>{
         Swal.fire({
-            title: `訂單編號：${e.target.dataset.id}`,
+            title: `訂單編號：${orderId}`,
             text: "已成功刪除。",
             icon: "success"
           });
@@ -124,7 +128,7 @@ function removeOrderItem(e){
 };
 
 // 4. DELETE 刪除全部訂單 -> removeAllorders()
-function removeAllorders(e){
+function removeAllorders(){
     axios
     .delete(ordersUrl,config)
     .then((delRes)=>{
@@ -148,7 +152,7 @@ function removeAllorders(e){
 // array.sort(compareFunction) compareFunction 接受參數 a、b 根據返回值排序
 // compareFunction(a, b) 返回負數，則 a 將在 b 之前 -> 升序
 // compareFunction(a, b) 返回正數，則 a 將在 b 之後 -> 降序
-function renderChartAll(){
+function render3cChartAll(){
     let categoryNum = {};
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{
@@ -197,7 +201,7 @@ function renderChartAll(){
 // acc: accumulator 累加器
 // [, value]: 解構賦值，取得陣列中的第二個元素 value，而第一個元素則被忽略
 // 0: initialValue
-function renderChartItem(){
+function render3cChartItem(){
     let categoryNum = {};
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{

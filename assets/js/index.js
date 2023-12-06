@@ -57,11 +57,11 @@ categorySearch.addEventListener('change',(e)=>{
 });
 
 // 1-4. 監聽 productList
-// (看錄影後修正：綁每個 addCartItemBtn -> 綁大範圍 productList)
+// (看錄影後修正：綁大範圍 productList)
 productList.addEventListener('click',(e)=>{
     e.preventDefault();
     let addCartBtn = e.target.dataset.btn;
-    if (addCartBtn !== addCartBtn){
+    if (addCartBtn !== "addCartBtn"){
         return
     };
     const targetID = e.target.dataset.id;
@@ -87,44 +87,41 @@ function getCartList(){
 getCartList();
 
 // 2-2. 渲染購物車列表 -> renderCartList()
+// (看錄影後嘗試進階寫法：map 取代 forEach)
 const cartItem = document.querySelector('#cartItem');
 const cartFinalTotal = document.querySelector('#cartFinalTotal');
 const cartFinalTotalNum = document.querySelector('#cartFinalTotalNum');
 function renderCartList(array,total){
     cartFinalTotal.textContent = "總金額：";
-    let str = '';
-    array.forEach((item)=>{
-        str += `
-        <tr class="fs-5">
-        <td class="d-flex align-items-center py-5">
-          <div class="overflow-hidden" style="height: 80px;">
-            <img src="${item.product.images}" class="me-4" alt="產品圖片-${item.product.title}" style="width: 80px">
-          </div>
-          <p>${item.product.title}</p>
-        </td>
-        <td class="py-5">${item.product.price}</td>
-        <td class="py-5">${item.quantity}</td>
-        <td class="py-5">${(item.product.price)*(item.quantity)}</td>
-        <td class="py-5">
-          <a href="#" class="d-flex justify-content-center align-items-center text-decoration-none">
-            <span class="material-symbols-outlined text-dark" style="font-size: 24px;" data-id="${item.id}" data-title="${item.product.title}" data-btn="removeBtn">
-              close
-            </span>
-          </a>
-        </td>
-      </tr>`;
-    });
-    cartItem.innerHTML = str;
+    cartItem.innerHTML = array.map((item)=> `
+    <tr class="fs-5">
+    <td class="d-flex align-items-center py-5">
+      <div class="overflow-hidden" style="height: 80px;">
+        <img src="${item.product.images}" class="me-4" alt="產品圖片-${item.product.title}" style="width: 80px">
+      </div>
+      <p>${item.product.title}</p>
+    </td>
+    <td class="py-5">${item.product.price}</td>
+    <td class="py-5">${item.quantity}</td>
+    <td class="py-5">${(item.product.price)*(item.quantity)}</td>
+    <td class="py-5">
+      <a href="#" class="d-flex justify-content-center align-items-center text-decoration-none">
+        <span class="material-symbols-outlined text-dark" style="font-size: 24px;" data-id="${item.id}" data-title="${item.product.title}" data-btn="removeBtn">
+          close
+        </span>
+      </a>
+    </td>
+    </tr>`).join('');
     // 使用 Intl.NumberFormat 來格式化數字，再 formatter.format(number) 將數字格式化為字串
     cartFinalTotalNum.textContent = `NT$ ${total.toLocaleString('en-US')}`;
 };
 
 // 2-3. 監聽 removeBtn
-// (看錄影後修正：綁每個 removeBtn -> 綁大範圍 productList)
+// (看錄影後修正：綁大範圍 productList)
 cartItem.addEventListener('click',(e)=>{
     e.preventDefault();
     let removeBtn = e.target.dataset.btn;
-    if (removeBtn !== removeBtn){
+    if (removeBtn !== "removeBtn"){
         return
     };
     const targetID = e.target.dataset.id;
