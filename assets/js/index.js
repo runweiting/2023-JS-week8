@@ -65,8 +65,8 @@ productList.addEventListener('click',(e)=>{
         return
     };
     const targetID = e.target.dataset.id;
-    const targetItem = e.target.dataset.title;
-    addCartItem(targetID,targetItem);
+    const targetTitle = e.target.dataset.title;
+    addCartItem(targetID,targetTitle);
 });
 
 // 2-1. GET 取得購物車列表 -> getCartList() -> renderCartList()
@@ -75,13 +75,13 @@ function getCartList(){
     .get(cartUrl)
     .then((res)=>{
         cartData = res.data.carts;
-        let cartFinalTotalNum = res.data.finalTotal;
+        let cartFinalTotal = res.data.finalTotal;
         if (cartData.length == 0){
-            removeAllBtn.classList.add('d-none')
+            removeAllBtn.classList.add('d-none');
         } else {
             removeAllBtn.classList.remove('d-none')
         };
-        renderCartList(cartData,cartFinalTotalNum);
+        renderCartList(cartData,cartFinalTotal);
     });
 };
 getCartList();
@@ -89,10 +89,9 @@ getCartList();
 // 2-2. 渲染購物車列表 -> renderCartList()
 // (看錄影後嘗試進階寫法：map 取代 forEach)
 const cartItem = document.querySelector('#cartItem');
+const cartTotalTitle = document.querySelector('#cartTotalTitle');
 const cartFinalTotal = document.querySelector('#cartFinalTotal');
-const cartFinalTotalNum = document.querySelector('#cartFinalTotalNum');
 function renderCartList(array,total){
-    cartFinalTotal.textContent = "總金額：";
     cartItem.innerHTML = array.map((item)=> `
     <tr class="fs-5">
     <td class="d-flex align-items-center py-5">
@@ -113,7 +112,7 @@ function renderCartList(array,total){
     </td>
     </tr>`).join('');
     // 使用 Intl.NumberFormat 來格式化數字，再 formatter.format(number) 將數字格式化為字串
-    cartFinalTotalNum.textContent = `NT$ ${total.toLocaleString('en-US')}`;
+    cartFinalTotal.textContent = `NT$ ${total.toLocaleString('en-US')}`;
 };
 
 // 2-3. 監聽 removeBtn
@@ -131,7 +130,7 @@ cartItem.addEventListener('click',(e)=>{
 
 // 3. PATCH/POST 加入購物車 -> addCartItem()
 // 先 GET 檢查是否有相同商品，有 PATCH +1，無 POST 1
-function addCartItem(targetID,targetItem){
+function addCartItem(targetID,targetTitle){
     const postData = {
         "data": {
           "productId": targetID,
@@ -167,7 +166,7 @@ function addCartItem(targetID,targetItem){
             .post(cartUrl,postData)
             .then((postRes)=>{
                 Swal.fire({
-                    title: `${targetItem}`,
+                    title: `${targetTitle}`,
                     text: "已成功加入購物車！",
                     icon: "success"
                   });
@@ -225,9 +224,12 @@ addOrderBtn.addEventListener('click',function(){
     user["email"] = customerEmail.value.trim();
     user["address"] = customerAdd.value.trim();
     user["payment"] = payment.value.trim();
-    // if 判斷：是否每個欄位都有填寫？
-    // includes() 判斷陣列是否包含特定的元素，回傳 true 或 false
-    if (Object.values(user).includes('')){
+    if (cartData.length == 0){
+        // if 判斷：購物車是否有商品？
+        Swal.fire("目前購物車內沒有商品！");
+    } else if (Object.values(user).includes('')){
+        // if 判斷：每個欄位是否都有填寫？
+        // includes() 判斷陣列是否包含特定的元素
         Swal.fire("每個欄位都為必填！");
     } else {
         orderData["data"]["user"] = user;
@@ -297,6 +299,7 @@ function addOrder(){
 // 清除購物車顯示資料
 function updateCart(){
     cartItem.innerHTML = ``;
-    cartFinalTotal.textContent = "購物車目前是空的。";
-    cartFinalTotalNum.textContent = 'NT$ 0';
+    cartTotalTitle.textContent = "購物車目前是空的。";
+    cartFinalTotal.textContent = 'NT$ 0';
+    getCartList();
 };

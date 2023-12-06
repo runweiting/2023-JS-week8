@@ -170,12 +170,10 @@ function render3cChartAll(){
     Object.entries(categoryNum)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    // 最大的 value 指定為最深的顏色
-    const maxQuantityItem = Math.max(...Object.values(categoryNum));
     // map + 三元運算式將 color 依據 value 排序
     let colorOrders = 
-    chartAllData.map(([key, value]) =>
-    value === maxQuantityItem ? '#5434A7' : value > Math.floor(maxQuantityItem / 2)? '#9D7FEA' : '#DACBFF');
+    chartAllData.map(([key, value], index) =>
+    index === 0 ? '#5434A7' : index === 1 ? '#9D7FEA' : '#DACBFF');
     let chartAll = c3.generate({
         bindto: '.chartAll',
         data: {
