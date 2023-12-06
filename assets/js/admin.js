@@ -153,13 +153,13 @@ function removeAllorders(){
 // compareFunction(a, b) 返回負數，則 a 將在 b 之前 -> 升序
 // compareFunction(a, b) 返回正數，則 a 將在 b 之後 -> 降序
 function render3cChartAll(){
-    let categoryNum = {};
+    let categoryIncome = {};
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{
-            if (categoryNum[product.category] == undefined){
-                categoryNum[product.category] = 1
+            if (categoryIncome[product.category] == undefined){
+                categoryIncome[product.category] = product.price * product.quantity
             } else {
-                categoryNum[product.category]++
+                categoryIncome[product.category] += product.price * product.quantity
             }
         });
     });
@@ -167,7 +167,7 @@ function render3cChartAll(){
     // map [key, value] 解構賦值 key 和 value
     // sort 將 value 降序
     let chartAllData = 
-    Object.entries(categoryNum)
+    Object.entries(categoryIncome)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
     // map + 三元運算式將 color 依據 value 排序
@@ -200,20 +200,21 @@ function render3cChartAll(){
 // [, value]: 解構賦值，取得陣列中的第二個元素 value，而第一個元素則被忽略
 // 0: initialValue
 function render3cChartItem(){
-    let categoryNum = {};
+    let categoryIncome = {};
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{
             const { title, quantity } = product;
-            if (categoryNum[title] === undefined){
-                categoryNum[title] = quantity
+            console.log(product);
+            if (categoryIncome[title] === undefined){
+                categoryIncome[title] = product.price
             } else {
-                categoryNum[title] += quantity
+                categoryIncome[title] += product.price
             }
         })
     });
     // 將物件轉換成陣列，並按照數量降序排序
     let chartItemData = 
-    Object.entries(categoryNum)
+    Object.entries(categoryIncome)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
     // 選取前三名
