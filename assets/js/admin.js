@@ -204,7 +204,6 @@ function render3cChartItem(){
     orderData.forEach((order)=>{
         order.products.forEach((product)=>{
             const { title, quantity } = product;
-            console.log(product);
             if (categoryIncome[title] === undefined){
                 categoryIncome[title] = product.price
             } else {
