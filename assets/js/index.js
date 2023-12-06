@@ -24,6 +24,51 @@ function getProductList(){
 };
 getProductList();
 
+// 1-2. 渲染、篩選產品列表 -> renderProductList()
+// 裡面有監聽：categorySearch、addCartItemBtn
+const searchResult = document.querySelector('.searchResult');
+const productList = document.querySelector('.productList');
+function renderProduct(category = "全部商品"){
+    filterProductData = category === "全部商品" ?
+    productData : productData.filter(item =>
+        item.category === category);
+    searchResult.textContent = filterProductData.length? `本次搜尋共${filterProductData.length}筆資料` : `查無此關鍵字資料`;
+    let str = '';
+    filterProductData.forEach((item)=>{
+        str += `
+        <li class="col-3 h-100 position-relative">
+            <span class="bg-dark text-white fs-5 px-6 py-2 position-absolute" style="top: 12px;right: 8px;">新品</span>
+            <img src="${item.images}" class="card-img-top" alt="產品圖片-${item.title}">
+            <input type="button" value="加入購物車" class="btn btn-dark rounded-0 fs-5 text-white w-100 py-2" data-id="${item.id}" data-title="${item.title}" data-btn="addCartBtn">
+            <div class="card-body">
+            <h5 class="card-title fs-5 py-2">${item.title}</h5>
+            <p class="card-text fs-5"><del>${item.origin_price}</del></p>
+            <p class="card-text fs-3">${item.price}</p>
+            </div>
+        </li>`;
+    });
+    productList.innerHTML = str;
+};
+
+// 1-3. 監聽 categorySearch
+const categorySearch = document.querySelector('#categorySearch');
+categorySearch.addEventListener('change',(e)=>{
+    renderProduct(e.target.value);
+});
+
+// 1-4. 監聽 productList
+// (看錄影後修正：綁每個 addCartItemBtn -> 綁大範圍 productList)
+productList.addEventListener('click',(e)=>{
+    e.preventDefault();
+    let addCartBtn = e.target.dataset.btn;
+    if (addCartBtn !== addCartBtn){
+        return
+    };
+    const targetID = e.target.dataset.id;
+    const targetItem = e.target.dataset.title;
+    addCartItem(targetID,targetItem);
+});
+
 // 2-1. GET 取得購物車列表 -> getCartList() -> renderCartList()
 function getCartList(){
     axios
@@ -41,48 +86,7 @@ function getCartList(){
 };
 getCartList();
 
-// 1-2. 渲染、篩選產品列表 -> renderProductList()
-// 裡面有監聽：categorySearch、addCartItemBtn
-function renderProduct(category = "全部商品"){
-    filterProductData = category === "全部商品" ?
-    productData : productData.filter(item =>
-        item.category === category);
-    const searchResult = document.querySelector('.searchResult');
-    searchResult.textContent = filterProductData.length? `本次搜尋共${filterProductData.length}筆資料` : `查無此關鍵字資料`;
-    const productList = document.querySelector('.productList');
-    let str = '';
-    filterProductData.forEach((item)=>{
-        str += `
-        <li class="col-3 h-100 position-relative">
-            <span class="bg-dark text-white fs-5 px-6 py-2 position-absolute" style="top: 12px;right: 8px;">新品</span>
-            <img src="${item.images}" class="card-img-top" alt="產品圖片-${item.title}">
-            <input type="button" value="加入購物車" class="btn btn-dark rounded-0 fs-5 text-white addCartItemBtn w-100 py-2" data-id="${item.id}" data-title="${item.title}">
-            <div class="card-body">
-            <h5 class="card-title fs-5 py-2">${item.title}</h5>
-            <p class="card-text fs-5"><del>${item.origin_price}</del></p>
-            <p class="card-text fs-3">${item.price}</p>
-            <input type="hidden" class="quantityInput" value="1">
-            </div>
-        </li>`;
-    });
-    productList.innerHTML = str;
-    // -> 在每次渲染後，重新設定按鈕監聽
-    const categorySearch = document.querySelector('#categorySearch');
-    categorySearch.addEventListener('change',(e)=>{
-        renderProduct(e.target.value);
-    });
-    const addCartItemBtn = document.querySelectorAll('.addCartItemBtn');
-    addCartItemBtn.forEach((item)=>{
-        item.addEventListener('click',(e)=>{
-            const targetID = e.target.dataset.id;
-            const targetItem = e.target.dataset.title;
-            addCartItem(targetID,targetItem);
-        })
-    });
-};
-
 // 2-2. 渲染購物車列表 -> renderCartList()
-// 裡面有監聽：removeBtn
 const cartItem = document.querySelector('#cartItem');
 const cartFinalTotal = document.querySelector('#cartFinalTotal');
 const cartFinalTotalNum = document.querySelector('#cartFinalTotalNum');
@@ -102,8 +106,8 @@ function renderCartList(array,total){
         <td class="py-5">${item.quantity}</td>
         <td class="py-5">${(item.product.price)*(item.quantity)}</td>
         <td class="py-5">
-          <a href="#" class="removeBtn d-flex justify-content-center align-items-center text-decoration-none" data-id="${item.id}" data-title="${item.product.title}">
-            <span class="material-symbols-outlined text-dark" style="font-size: 24px;">
+          <a href="#" class="d-flex justify-content-center align-items-center text-decoration-none">
+            <span class="material-symbols-outlined text-dark" style="font-size: 24px;" data-id="${item.id}" data-title="${item.product.title}" data-btn="removeBtn">
               close
             </span>
           </a>
@@ -113,12 +117,20 @@ function renderCartList(array,total){
     cartItem.innerHTML = str;
     // 使用 Intl.NumberFormat 來格式化數字，再 formatter.format(number) 將數字格式化為字串
     cartFinalTotalNum.textContent = `NT$ ${total.toLocaleString('en-US')}`;
-    // -> 在每次渲染後，重新設定按鈕監聽
-    const removeBtn = document.querySelectorAll('.removeBtn');
-    removeBtn.forEach((item)=>{
-        item.addEventListener('click',removeCartItem);
-    });
 };
+
+// 2-3. 監聽 removeBtn
+// (看錄影後修正：綁每個 removeBtn -> 綁大範圍 productList)
+cartItem.addEventListener('click',(e)=>{
+    e.preventDefault();
+    let removeBtn = e.target.dataset.btn;
+    if (removeBtn !== removeBtn){
+        return
+    };
+    const targetID = e.target.dataset.id;
+    const targetTitle = e.target.dataset.title;
+    removeCartItem(targetID,targetTitle);
+});
 
 // 3. PATCH/POST 加入購物車 -> addCartItem()
 // 先 GET 檢查是否有相同商品，有 PATCH +1，無 POST 1
@@ -169,10 +181,7 @@ function addCartItem(targetID,targetItem){
 };
 
 // 4. DELETE 刪除購物車特定商品 -> removeCartItem()
-function removeCartItem(e){
-    e.preventDefault();
-    const targetID = e.currentTarget.dataset.id;
-    const targetTitle = e.currentTarget.dataset.title;
+function removeCartItem(targetID,targetTitle){
     const deleteCartItemUrl = `${cartUrl}/${targetID}`;
     axios
     .delete(deleteCartItemUrl)
