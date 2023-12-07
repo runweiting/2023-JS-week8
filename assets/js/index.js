@@ -173,6 +173,7 @@ function addCartItem(targetID,targetTitle){
                 getCartList();
             });
         };
+        cartTotalTitle.textContent = "總金額：";
     });
 };
 
@@ -247,15 +248,19 @@ const constraints = {
     customerTel: {
         presence: {
             message: "^必填！"
+        },
+        format: {
+            pattern: /^[09]{2}\d{8}$/,
+            message: "^請輸入正確的電話格式！"
         }
     },
     customerEmail: {
+        presence: {
+            message: "^必填！"
+        },
         email: {
             email: true,
             message: "^請輸入有效的電子郵件地址！"
-        },
-        presence: {
-            message: "^必填！"
         }
     },
     customerAdd: {

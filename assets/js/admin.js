@@ -143,15 +143,13 @@ function removeAllorders(){
 
 // 5-1. 渲染 C3 -> renderChartAll()
 // LV1：全產品類別營收比重
-// filterData = [{category: "床架",..},..]
-// categoryNum = {'床架': 1,..}
-// newData = [['床架',1],..]
-// Object.entries(categoryNum) = Array(3)['床架',1]...
-// [key, value] 解構賦值語法，將 Object.entries 返回的 [key, value] 陣列中的元素分別賦值給 key 和 value
-// => [key, value] 表示箭頭函式返回一個包含 key 和 value 的新陣列
-// array.sort(compareFunction) compareFunction 接受參數 a、b 根據返回值排序
-// compareFunction(a, b) 返回負數，則 a 將在 b 之前 -> 升序
-// compareFunction(a, b) 返回正數，則 a 將在 b 之後 -> 降序
+// categoryIncome = {'床架': 營收,..}
+// chartAllData -> [['床架',營收],..]
+// Object.entries(categoryIncome) = [['床架',營收],[],[]..]
+// .map 帶入參數 [key, value] 解構賦值，將 Object.entries 返回的 [key, value] 分別賦值給 [key, value] => [key, value] 表示箭頭函式返回一個包含 key 和 value 的新陣列
+// .sort 帶入參數 a,b 根據 compareFunction 返回值排序
+// 返回負數，則 a 在 b 之前 -> 升序
+// 返回正數，則 a 在 b 之後 -> 降序
 function render3cChartAll(){
     let categoryIncome = {};
     orderData.forEach((order)=>{
@@ -163,14 +161,12 @@ function render3cChartAll(){
             }
         });
     });
-    // 將物件轉換成陣列，並按照數量降序排序
-    // map [key, value] 解構賦值 key 和 value
-    // sort 將 value 降序
+    // 將物件轉陣列、並按數量降序
     let chartAllData = 
     Object.entries(categoryIncome)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    // map + 三元運算式將 color 依據 value 排序
+    // map + 三元運算式，使 color 依 value 排序
     let colorOrders = 
     chartAllData.map(([key, value], index) =>
     index === 0 ? '#5434A7' : index === 1 ? '#9D7FEA' : '#DACBFF');
@@ -195,10 +191,10 @@ function render3cChartAll(){
 // 5-2. 渲染 C3 -> renderChartItem()
 // LV2：全品項營收比重：前三名、其他(4~8名)
 // arr.reduce(callback[accumulator, currentValue, currentIndex, array], initialValue)
-// reduce((acc, [, value]) => acc + value, 0);
-// acc: accumulator 累加器
+// .reduce 帶入參數 acc, [, value] 返回 => acc + value, 0 表示箭頭函式返回累加結果，初始值為 0
+// acc: accumulator 變數，代表目前的累加結果
 // [, value]: 解構賦值，取得陣列中的第二個元素 value，而第一個元素則被忽略
-// 0: initialValue
+// 0: 即 accumulator 的初始值，如省略，將使用陣列的第一個元素作為初始值，並從第二個元素開始進行運算。
 function render3cChartItem(){
     let categoryIncome = {};
     orderData.forEach((order)=>{
@@ -211,14 +207,14 @@ function render3cChartItem(){
             }
         })
     });
-    // 將物件轉換成陣列，並按照數量降序排序
+    // 將物件轉陣列、並按數量降序
     let chartItemData = 
     Object.entries(categoryIncome)
     .map(([key, value]) => [key, value])
     .sort((a,b)=> b[1] - a[1]);
-    // 選取前三名
+    // 選取前三名 + 其他
     let top3 = chartItemData.slice(0,3);
-    // 計算「其它」的總數
+    // 計算其它的總數
     let otherTotal = chartItemData.slice(3).reduce((acc,[, value])=> acc + value, 0);
     if (otherTotal > 0){
         top3.push(["其他",otherTotal]);
@@ -243,4 +239,3 @@ function render3cChartItem(){
         }
     })
 };
-
