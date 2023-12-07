@@ -42,8 +42,8 @@ function renderProduct(category = "全部商品"){
             <input type="button" value="加入購物車" class="btn btn-dark rounded-0 fs-5 text-white w-100 py-2" data-id="${item.id}" data-title="${item.title}" data-btn="addCartBtn">
             <div class="card-body">
             <h5 class="card-title fs-5 py-2">${item.title}</h5>
-            <p class="card-text fs-5"><del>${item.origin_price}</del></p>
-            <p class="card-text fs-3">${item.price}</p>
+            <p class="card-text fs-5"><del>${toThousands(item.origin_price)}</del></p>
+            <p class="card-text fs-3">${toThousands(item.price)}</p>
             </div>
         </li>`;
     });
@@ -100,9 +100,9 @@ function renderCartList(array,total){
       </div>
       <p>${item.product.title}</p>
     </td>
-    <td class="py-5">${item.product.price}</td>
+    <td class="py-5">${toThousands(item.product.price)}</td>
     <td class="py-5">${item.quantity}</td>
-    <td class="py-5">${(item.product.price)*(item.quantity)}</td>
+    <td class="py-5">${toThousands((item.product.price)*(item.quantity))}</td>
     <td class="py-5">
       <a href="#" class="d-flex justify-content-center align-items-center text-decoration-none">
         <span class="material-symbols-outlined text-dark" style="font-size: 24px;" data-id="${item.id}" data-title="${item.product.title}" data-btn="removeBtn">
@@ -112,7 +112,7 @@ function renderCartList(array,total){
     </td>
     </tr>`).join('');
     // 使用 Intl.NumberFormat 來格式化數字，再 formatter.format(number) 將數字格式化為字串
-    cartFinalTotal.textContent = `NT$ ${total.toLocaleString('en-US')}`;
+    cartFinalTotal.textContent = `NT$ ${toThousands(total)}`;
 };
 
 // 2-3. 監聽 removeBtn
@@ -303,3 +303,10 @@ function updateCart(){
     cartFinalTotal.textContent = 'NT$ 0';
     getCartList();
 };
+
+
+// util js
+function toThousands(num){
+    return `NT$ ${num.toLocaleString('en-US')}`
+};
+
