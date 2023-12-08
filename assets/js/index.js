@@ -78,8 +78,10 @@ function getCartList(){
         let cartFinalTotal = res.data.finalTotal;
         if (cartData.length == 0){
             removeAllBtn.classList.add('d-none');
+            cartTotalTitle.textContent = "購物車目前是空的。";
         } else {
-            removeAllBtn.classList.remove('d-none')
+            removeAllBtn.classList.remove('d-none');
+            cartTotalTitle.textContent = "總金額：";
         };
         renderCartList(cartData,cartFinalTotal);
     });
@@ -280,8 +282,8 @@ inputs.forEach((item)=>{
         // 1. 清空錯誤提示
         const errorsMessage = document.querySelector(`.${item.name}`);
         errorsMessage.innerHTML = ``;
-        // 2. 儲存回傳訊息
-        let errors = validate(addOrderForm,constraints);
+        // 2. 儲存回傳訊息，如果沒有錯誤，則將其預設為空字串
+        let errors = validate(addOrderForm,constraints) || '';
         // 3. 利用 key 作為 ('.${key}') 顯示 errors value
         if (errors){
             Object.keys(errors).forEach(key =>{
@@ -304,7 +306,6 @@ function addOrder(){
 // 清除購物車顯示資料
 function updateCart(){
     cartItem.innerHTML = ``;
-    cartTotalTitle.textContent = "購物車目前是空的。";
     cartFinalTotal.textContent = 'NT$ 0';
     getCartList();
 };
